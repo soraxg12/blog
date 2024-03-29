@@ -24,10 +24,14 @@ export async function GetPosts() {
 }
 
 
-export async function GetPostsId(id:string) {
+export async function GetPostsId(id: string) {
     const contentDirectory = path.join(process.cwd(), '_post');
     const fullPath = path.join(contentDirectory, `${id}.md`);
+    if (!fs.existsSync(fullPath)){
+        return null
+    }
     const fileContents = fs.readFileSync(fullPath, 'utf-8');
+    console.log(fileContents)
     const matterResult = matter(fileContents);
 
     const processedContent = await remark().use(html).process(matterResult.content);
